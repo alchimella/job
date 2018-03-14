@@ -1,29 +1,36 @@
 class Draw {
-    drawSnake(x, y) {
-        ctx.fillStyle = 'green';
+    static drawSnake(x, y) {
+        ctx.fillStyle = '#b3cccc';
         ctx.fillRect(x * snakeSize, y * snakeSize, snakeSize, snakeSize);
-        ctx.strokeStyle = 'red';
+        ctx.strokeStyle = '#334d4d';
         ctx.strokeRect(x * snakeSize, y * snakeSize, snakeSize, snakeSize);
     }
 
-    drawApple(x, y) {
-        ctx.fillStyle = "red";
-        ctx.fillRect(x * snakeSize, y * snakeSize, snakeSize, snakeSize);
-        ctx.fillStyle = "blue";
-        ctx.fillRect(x * snakeSize + 1, y * snakeSize + 1, snakeSize - 2, snakeSize - 2);
+    static drawApple(x, y) {
+        ctx.beginPath();
+        ctx.fillStyle = "#ff1a1a";
+        ctx.arc(x * snakeSize, y * snakeSize, 3, 0, 2 * Math.PI);
+        /*ctx.fillStyle = "#4d0000";
+        ctx.stroke();*/
+        ctx.fill();
     }
 
-    outputScore() {
+    static outputScore() {
         let scoreText = "Your score: " + score;
         ctx.fillStyle = 'blue';
         ctx.fillText(scoreText, 145, heightMap - 5);
     }
 
-    /*paint() {
-        ctx. fillStyle = 'lightgrey';
+    static main() {
+        /*ctx. fillStyle = 'lightgrey';
         ctx.fillRect(0, 0, width, height);
         ctx.strokeStyle = 'black';
-        ctx.strokeRect(0, 0, width, height);
+        ctx.strokeRect(0, 0, width, height);*/
 
-    }*/
+        for(let i = 0; i < snake.length; i++){
+            Draw.drawSnake(snake[i].x, snake[i].y);
+        }
+        Draw.drawApple(apple._xApple, apple._yApple);
+        this.outputScore();
+    }
 }
