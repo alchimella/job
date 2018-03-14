@@ -1,0 +1,23 @@
+#canvas {
+    width: 900px;
+    height: 420px;
+    border: steelblue 2px solid;
+    border-radius: 5px;
+}
+
+.start {
+    width: 150px;
+    height: 40px;
+    background-color: white;
+    color: black;
+    border: 2px solid steelblue;
+    border-radius: 5px;
+    -webkit-transition-duration:  0.4s;
+    transition-duration: 0.4s;
+}
+
+.start:hover {
+    background-color: steelblue;
+    color: white;
+}
+
