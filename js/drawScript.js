@@ -1,36 +1,45 @@
 class Draw {
-    static drawSnake(x, y) {
-        ctx.fillStyle = '#b3cccc';
-        ctx.fillRect(x * snakeSize, y * snakeSize, snakeSize, snakeSize);
-        ctx.strokeStyle = '#334d4d';
-        ctx.strokeRect(x * snakeSize, y * snakeSize, snakeSize, snakeSize);
+    static block(col, row) {
+        this.col = col;
+        this.row = row;
     }
 
+    static drawSnake() {
+        let x = this.col * scale;
+        let y = this.row * scale;
+        ctx.fillStyle = '#b3cccc';
+        ctx.fillRect(x, y, scale, scale);
+        ctx.strokeStyle = '#334d4d';
+        ctx.strokeRect(x, y, scale, scale);
+
+    }
     static drawApple(x, y) {
+        x = x * scale + scale / 2;
+        y = y * scale + scale / 2;
         ctx.beginPath();
-        ctx.fillStyle = "#ff1a1a";
-        ctx.arc(x * snakeSize, y * snakeSize, 3, 0, 2 * Math.PI);
-        /*ctx.fillStyle = "#4d0000";
-        ctx.stroke();*/
+        ctx.fillStyle = '#cc0000';
+        ctx.arc(x, y, 5, 0, 2 * Math.PI);
         ctx.fill();
     }
 
     static outputScore() {
-        let scoreText = "Your score: " + score;
-        ctx.fillStyle = 'blue';
-        ctx.fillText(scoreText, 145, heightMap - 5);
+        ctx.font = "14px Verdana";
+        ctx.fillStyle = '#000000';
+        ctx.fillText(`Your score: ${score}`, 15, 25);
     }
 
+    static gameOver() {
+        clearInterval(intervalId);
+        ctx.font = "60px Verdana";
+        ctx.fillStyle = '#000000';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText("GAME OVER!", widthMap / 2, heightMap / 2);
+    }
     static main() {
-        /*ctx. fillStyle = 'lightgrey';
-        ctx.fillRect(0, 0, width, height);
-        ctx.strokeStyle = 'black';
-        ctx.strokeRect(0, 0, width, height);*/
-
         for(let i = 0; i < snake.length; i++){
-            Draw.drawSnake(snake[i].x, snake[i].y);
+            Draw.drawSnake(snake[0].x, snake[0].y);
         }
-        Draw.drawApple(apple._xApple, apple._yApple);
         this.outputScore();
     }
 }

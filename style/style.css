@@ -1,11 +1,4 @@
-#myCanvas {
-    width: 900px;
-    height: 420px;
-    border: steelblue 2px solid;
-    border-radius: 5px;
-}
-
-.startButton {
+#btn {
     width: 150px;
     height: 40px;
     background-color: steelblue;
@@ -16,7 +9,7 @@
     transition-duration: 0.4s;
 }
 
-.startButton:hover {
+#btn:hover {
     background-color: white;
     color: steelblue;
 }

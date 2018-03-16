@@ -1,20 +1,31 @@
 class Snake {
     static createSnake() {
-        for (let i = snakeSize.length; i >= 0; i--) {
-            snake.push({x:1, y:0});
+        let snake = [
+            Draw.block(6, 5),
+            Draw.block(5, 5),
+            Draw.block(4, 5)
+        ];
+
+
+        for (let i = 0; i < snake.length; i--) {
+            snake[i] = Draw.drawSnake();
+            //snake.push({x:i, y:0});
         }
     }
 
     static stepSnake() {
-        for (let i = snakeSize.length; i > 0; --i) {
-            snake[i].x = snake[i - 1].x;
-            snake[i].y = snake[i - 1].y;
-        }
-        if (direction == 'right') snake[0].x ++;
-        if (direction == 'left') snake[0].x --;
-        if (direction == 'up') snake[0].y --;
-        if (direction == 'down') snake[0].y ++;
+        let snakeX = snake[0].x;
+        let snakeY = snake[0].y;
 
+        if (direction == 'right') {
+            snakeX++;
+        } else if (direction == 'left') {
+            snakeX--;
+        } else if (direction == 'up') {
+            snakeY--;
+        } else if (direction == 'down') {
+            snakeY++;
+        }
     }
 
     static checkCollapse(x, y) {
@@ -26,25 +37,23 @@ class Snake {
         }
     }
 
-    static eatApple() {
-        apple = new Apple();
+    static eatApple(block) {
+        /*apple = new Apple();
         for (let i = 0; i < 10; i++) {
             if (snake[0].x == apple._xApple && snake[0].y == apple._yApple) {
                 snakeSize.length += 1;
             }
-            if (snake[0].x > widthMap) direction = 1;
-            if (snake[0].x < 0) direction = 2;
-            if (snake[0].y < heightMap) direction = 3;
-            if (snake[0].y < 0) direction = 0;
 
             for (let i = 1; i < snakeSize; i++) {
                 if (snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
                     snakeSize = i;
-                    prompt("GAME OVER!");
+                    Draw.gameOver();
+                    return;
                 }
             }
             score++;
             Apple.createApple();
-        }
+        }*/
+
     }
 }
