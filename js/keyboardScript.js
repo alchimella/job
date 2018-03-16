@@ -5,7 +5,7 @@
         switch (keyCode) {
             case 37:
                 if (direction != 'right'){
-                    direction = 'left';
+                    direction = new drawBlock();
                 }
                 console.log('left');
                 break;
@@ -29,4 +29,4 @@
                 break;
         }
     }
-})(window, document, Draw);
+})(window, document);
