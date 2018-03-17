@@ -1,17 +1,13 @@
-class Apple {
-    constructor() {
-        this._xApple = Math.floor(Math.random() * 30) + 1;
-        this._yApple = Math.floor(Math.random() * 30) + 1;
-    }
+function Apple() {
+    this.position = new drawBlock(10, 10);
+}
 
-    static createApple() {
-        for (let i = 0; i > snake.length; i++) {
-            let snakeX = snake[i].x;
-            let snakeY = snake[i].y;
-            if (apple._xApple === snakeX || apple._yApple === snakeY || apple._xApple === snakeX || apple._yApple === snakeY) {
-                apple._xApple = Math.floor((Math.random() * 30) + 1);
-                apple._yApple = Math.floor((Math.random() * 30) + 1);
-            }
-        }
-    }
+Apple.prototype.createApple = function() {
+    this.position.drawApple();
+};
+
+Apple.prototype.moveApple = function() {
+    let randCol = Math.floor(Math.random() * (widthBlock - 2)) + 1;
+    let randRow = Math.floor(Math.random() * (heightBlock - 2)) + 1;
+    this.position = new drawBlock(randCol, randRow);
 }

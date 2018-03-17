@@ -1,27 +1,19 @@
 let score = 0;
 let scale = 10;
-let snakeSize = 4;
 let widthMap = 500;
 let heightMap = 500;
 let widthBlock = widthMap / scale;
 let heightBlock = heightMap / scale;
-let apple;
-let direction = 'right';
+
 
 function init() {
-    let canvas = document.getElementById("canvas");
-    window.ctx = canvas.getContext("2d");
-    ctx.fillStyle = '#4682B4';
-    ctx.fillRect(0, 0, widthMap, scale);
-    ctx.fillRect(0, heightMap - scale, widthMap, scale);
-    ctx.fillRect(0, 0, scale, heightMap);
-    ctx.fillRect(widthMap - scale, 0, scale, heightMap);
-    let snakeSample = new drawBlock();
-    snakeSample.drawSnake();
-    let snakeSmple1 = new Snake();
-    snakeSmple1.createSnake();
-    drawApple(15, 17);
+    drawBoard();
     outputScore();
+    let snake = new Snake();
+    snake.createSnake();
+    let apple = new Apple();
+    apple.createApple();
+    apple.moveApple();
 }
 
 

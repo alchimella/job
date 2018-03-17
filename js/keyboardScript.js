@@ -1,12 +1,12 @@
-(function (window, document) {
+/*(function (window, document) {
     document.onkeydown = function keyboardEvent(event) {
         keyCode = window.event.keyCode;
         keyCode = event.keyCode;
         switch (keyCode) {
             case 37:
                 if (direction != 'right'){
-                    direction = new drawBlock();
-                }
+                    /*direction = new drawBlock();*/
+                /*}
                 console.log('left');
                 break;
             case 38:
@@ -29,4 +29,4 @@
                 break;
         }
     }
-})(window, document);
+})(window, document);*/
