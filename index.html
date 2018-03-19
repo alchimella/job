@@ -3,15 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <link href="style/style.css" rel="stylesheet">
-    <script src="js/mapScript.js"></script>
-    <script src="js/drawScript.js"></script>
-    <script src="js/appleScript.js"></script>
-    <script src="js/snakeScript.js"></script>
-    <script src="js/keyboardScript.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
     <title>Snake Game</title>
 </head>
-<body>
-    <canvas id="canvas" width="500" height="500"></canvas>
-    <button id="btn" onclick="init()">Start</button>
+<body id="body">
+
+    <canvas id="canvas" width="500" height="500">
+        <script src="js/drawScript.js"></script>
+        <script src="js/snakeScript.js"></script>
+        <script src="js/appleScript.js"></script>
+        <script src="js/keyboardScript.js"></script>
+        <script></script>
+    </canvas>
+    <button id="btn" onclick="output();">Start</button>
 </body>
 </html>

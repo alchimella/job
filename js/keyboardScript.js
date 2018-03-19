@@ -1,32 +1,14 @@
-/*(function (window, document) {
-    document.onkeydown = function keyboardEvent(event) {
-        keyCode = window.event.keyCode;
-        keyCode = event.keyCode;
-        switch (keyCode) {
-            case 37:
-                if (direction != 'right'){
-                    /*direction = new drawBlock();*/
-                /*}
-                console.log('left');
-                break;
-            case 38:
-                if (direction != 'left'){
-                    direction = 'right';
-                }
-                console.log('right');
-                break;
-            case 39:
-                if (direction != 'down'){
-                    direction = 'up';
-                }
-                console.log('up');
-                break;
-            case 40:
-                if (direction != 'up'){
-                    direction = 'down';
-                }
-                console.log('down');
-                break;
-        }
+let apple = new Apple();
+let direction = {
+    37: "left",
+    38: "up",
+    39: "right",
+    40: "down"
+};
+
+$("body").keydown(function(event) {
+    let newDirection = direction[event.keyCode];
+    if (newDirection !== undefined) {
+        snake.setDirection(newDirection);
     }
-})(window, document);*/
+});

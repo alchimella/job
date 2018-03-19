@@ -1,109 +1,140 @@
-function drawBlock(col, row) {
+// Настройка «холста»
+let canvas = document.getElementById("canvas");
+let ctx = canvas.getContext("2d");
+// Получаем ширину и высоту элемента canvas
+let width = canvas.width;
+let height = canvas.height;
+// Вычисляем ширину и высоту в ячейках
+let blockSize = 10;
+let widthInBlocks = width / blockSize;
+let heightInBlocks = height / blockSize;
+// Устанавливаем счет 0
+let score = 0;
+// Рисуем рамку
+let drawBorder = function () {
+    ctx.fillStyle = "Gray";
+    ctx.fillRect(0, 0, width, blockSize);
+    ctx.fillRect(0, height - blockSize, width, blockSize);
+    ctx.fillRect(0, 0, blockSize, height);
+    ctx.fillRect(width - blockSize, 0, blockSize, height);
+};
+// Выводим счет игры в левом верхнем углу
+let drawScore = function () {
+    ctx.font = "20px Courier";
+    ctx.fillStyle = "Black";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
+    ctx.fillText("Счет: " + score, blockSize, blockSize);
+};
+// Отменяем действие setInterval и печатаем сообщение «Конец игры»
+let gameOver = function () {
+    clearInterval(intervalId);
+    ctx.font = "60px Courier";
+    ctx.fillStyle = "Black";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("Конец игры", width / 2, height / 2);
+};
+// Рисуем окружность (используя функцию из главы 14)
+let circle = function (x, y, radius, fillCircle) {
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+    if (fillCircle) {
+        ctx.fill();
+    } else {
+        ctx.stroke();
+    }
+};
+// Задаем конструктор Block (ячейка)
+let Block = function (col, row) {
     this.col = col;
     this.row = row;
-}
-
-let intervalId = setInterval(function () {
-    //ctx.clearRect(0, 0, widthMap, heightMap);
-    outputScore();
-    snake.snakeMove();
-    snake.drawSnake();
-    apple.drawApple();
-    //drawBlock();
-    apple.newApple();
-}, 100);
-
-drawBlock.prototype.drawSnake = function() {
-    let x = this.col * scale;
-    let y = this.row * scale;
-    ctx.fillStyle = '#b3cccc';
-    ctx.fillRect(x, y, scale, scale);
-    ctx.strokeStyle = '#334d4d';
-    ctx.strokeRect(x, y, scale, scale);
 };
-
-function Snake() {
-    this.snake = [
-        new drawBlock(7, 5),
-        new drawBlock(6, 5),
-        new drawBlock(5, 5),
-        new drawBlock(4, 5)
-    ];
-
-    this.direction = "right";
-    this.nextDirection = "right";
-}
-
-Snake.prototype.createSnake = function() {
-    for (let i = 0; i < this.snake.length; i++) {
-        this.snake[i].drawSnake();
-    }
+// Рисуем квадрат в позиции ячейки
+Block.prototype.drawSquare = function (color) {
+    let x = this.col * blockSize;
+    let y = this.row * blockSize;
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, blockSize, blockSize);
 };
-
-drawBlock.prototype.drawApple = function() {
-    let x = this.x * scale + scale / 2;
-    let y = this.y * scale + scale / 2;
-    ctx.beginPath();
-    ctx.fillStyle = '#cc0000';
-    ctx.arc(x, y, 5, 0, 2 * Math.PI);
-    ctx.fill();
+// Рисуем круг в позиции ячейки
+Block.prototype.drawCircle = function (color) {
+    let centerX = this.col * blockSize + blockSize / 2;
+    let centerY = this.row * blockSize + blockSize / 2;
+    ctx.fillStyle = color;
+    circle(centerX, centerY, blockSize / 2, true);
 };
-
-function outputScore() {
-    ctx.font = "14px Verdana";
-    ctx.fillStyle = '#000000';
-    ctx.fillText(`Your score: ${score}`, 15, 25);
-}
-
-function gameOver() {
-    clearInterval(intervalId);
-    ctx.font = "60px Verdana";
-    ctx.fillStyle = '#000000';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText("GAME OVER!", widthMap / 2, heightMap / 2);
-}
-
-drawBlock.prototype.equal = function (otherBlock) {
+// Проверяем, находится ли эта ячейка в той же позиции, что и ячейка
+// otherBlock
+Block.prototype.equal = function (otherBlock) {
     return this.col === otherBlock.col && this.row === otherBlock.row;
 };
-
-Snake.prototype.checkCollapse = function (head) {
-    let leftCollapse = (head.col === 0);
-    let topCollapse = (head.row === 0);
-    let rightCollapse = (head.col === widthBlock - 1);
-    let bottomCollapse = (head.row === heightBlock - 1);
-    let wallCollapse = leftCollapse || topCollapse || rightCollapse || bottomCollapse;
-    let selfCollapse = false;
-
-    for (let i = 0; i < this.snake.length; i++) {
-        if (head.equal(this.snake[i])) {
-            selfCollapse = true;
-        }
-    }
-    return wallCollapse || selfCollapse;
+// Задаем конструктор Snake (змейка)
+let Snake = function () {
+    this.segments = [
+        new Block(7, 5),
+        new Block(6, 5),
+        new Block(5, 5)
+    ];
+    this.direction = "right";
+    this.nextDirection = "right";
 };
+// Рисуем квадратик для каждого сегмента тела змейки
+Snake.prototype.draw = function () {
+    for (let i = 0; i < this.segments.length; i++) {
+        this.segments[i].drawSquare("Blue");
+    }
+};
+// Создаем новую голову и добавляем ее к началу змейки,
+// чтобы передвинуть змейку в текущем направлении
+Snake.prototype.move = function () {
+    let head = this.segments[0];
+    let newHead;
+    this.direction = this.nextDirection;
+    if (this.direction === "right") {
+        newHead = new Block(head.col + 1, head.row);
+    } else if (this.direction === "down") {
+        newHead = new Block(head.col, head.row + 1);
+    } else if (this.direction === "left") {
+        newHead = new Block(head.col - 1, head.row);
+    } else if (this.direction === "up") {
+        newHead = new Block(head.col, head.row - 1);
+    }
+    if (this.checkCollision(newHead)) {
+        gameOver();
+        return;
+    }
+    this.segments.unshift(newHead);
+    if (newHead.equal(apple.position)) {
+        score++;
+        apple.move();
+    } else {
+        this.segments.pop();
+    }
+};
+// Проверяем, не столкнулась ли змейка со стеной или собственным
+// телом
+Snake.prototype.checkCollision = function (head) {
+    let leftCollision = (head.col === 0);
+    let topCollision = (head.row === 0);
+    let rightCollision = (head.col === widthInBlocks - 1);
+    let bottomCollision = (head.row === heightInBlocks - 1);
+    let wallCollision = leftCollision || topCollision || rightCollision || bottomCollision;
+    let selfCollision = false;
 
-function key() {
-    let direction = {
-        37: "left",
-        38: "up",
-        39: "right",
-        40: "down"
-    };
-
-    function keyDown(event) {
-        let newDirection = direction[event.keyCode];
-        if(newDirection !== undefined) {
-            snake.setDirection(newDirection);
+    for (let i = 0; i < this.segments.length; i++) {
+        if (head.equal(this.segments[i])) {
+            selfCollision = true;
         }
     }
-}
-
+    return wallCollision || selfCollision;
+};
+// Задаем следующее направление движения змейки на основе нажатой
+// клавиши
 Snake.prototype.setDirection = function (newDirection) {
     if (this.direction === "up" && newDirection === "down") {
         return;
-    } else if (this.direction === "right" && newDirection === "down") {
+    } else if (this.direction === "right" && newDirection === "left") {
         return;
     } else if (this.direction === "down" && newDirection === "up") {
         return;
@@ -112,49 +143,43 @@ Snake.prototype.setDirection = function (newDirection) {
     }
     this.nextDirection = newDirection;
 };
-
-function Apple() {
-    this.position = new drawBlock(10, 10);
-}
-
-Apple.prototype.newApple = function () {
-    this.position.drawApple();
+// Задаем конструктор Apple (яблоко)
+let Apple = function () {
+    this.position = new Block(10, 10);
 };
-
-Apple.prototype.appleMove = function () {
-  let randomCol = Math.floor(Math.random() * (widthBlock - 2)) + 1;
-  let randomRow = Math.floor(Math.random() * (heightBlock - 2)) + 1;
-  this.position = new drawBlock(randomCol, randomRow);
+// Рисуем кружок в позиции яблока
+Apple.prototype.draw = function () {
+    this.position.drawCircle("LimeGreen");
 };
-
-Snake.prototype.snakeMove = function () {
-    let head = this.snake[0];
-    let newHead;
-
-    if (head.direction === 'right') {
-        newHead = new drawBlock(head.col, head.row + 1);
+// Перемещаем яблоко в случайную позицию
+Apple.prototype.move = function () {
+    let randomCol = Math.floor(Math.random() * (widthInBlocks - 2)) + 1;
+    let randomRow = Math.floor(Math.random() * (heightInBlocks - 2)) + 1;
+    this.position = new Block(randomCol, randomRow);
+};
+// Создаем объект-змейку и объект-яблоко
+let snake = new Snake();
+let apple = new Apple();
+// Запускаем функцию анимации через setInterval
+let intervalId = setInterval(function () {
+    ctx.clearRect(0, 0, width, height);
+    drawScore();
+    snake.move();
+    snake.draw();
+    apple.draw();
+    drawBorder();
+}, 100);
+// Преобразуем коды клавиш в направления
+let directions = {
+    37: "left",
+    38: "up",
+    39: "right",
+    40: "down"
+};
+// Задаем обработчик события keydown (клавиши-стрелки)
+$("body").keydown(function (event) {
+    let newDirection = directions[event.keyCode];
+    if (newDirection !== undefined) {
+        snake.setDirection(newDirection);
     }
-    if (head.direction === 'left') {
-        newHead = new drawBlock(head.col + 1, head.row);
-    }
-    if (head.direction === 'up') {
-        newHead = new drawBlock(head.col, head.row - 1);
-    }
-    if (head.direction === 'down') {
-        newHead = new drawBlock(head.col - 1, head.row);
-    }
-
-    if (this.checkCollapse(newHead)) {
-        gameOver();
-        return;
-    }
-
-    this.snake.unshift(newHead);
-
-    if (newHead.equal(apple.position)) {
-        score++;
-        apple.appleMove();
-    } else {
-        this.snake.pop();
-    }
-}
+});
